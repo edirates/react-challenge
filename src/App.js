@@ -1,6 +1,8 @@
 import React, { Component, Fragment, useState, useEffect } from 'react';
-import Search from './Search';
-import List from './List';
+import axios from './apis/axios';
+import NavBar from './components/NavBar';
+import Search from './components/Search';
+import List from './components/List';
 import './App.css';
 
 const App = () => {
@@ -12,17 +14,21 @@ const App = () => {
   }
 
   useEffect(() => {
-    fetch("https://digimon-api.herokuapp.com/api/digimon")
-    .then( response => response.json() )
-    .then( (digimons) => {
-      setDigimons(digimons)
+    axios({
+      method: "GET"
     })
+    .then(({data}) => {
+      setDigimons(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }, []);
 
   return (
     <Fragment>
-      <Search search={search} change={handleChange}/>
-      <List search={search} digimons={digimons.slice(0, 12)} />
+      <NavBar search={search} change={handleChange}/>
+      <List search={search} digimons={digimons} />
     </Fragment>
   );
 }
