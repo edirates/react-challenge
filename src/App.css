@@ -71,3 +71,16 @@
   font-size: calc(10px + 2vmin);
   color: #2E3B55;
 }
+
+.my-digimons {
+  background-color: #cfe8fc;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  /* flex-direction: column; */
+  align-items: center;
+  padding-top: 30px;
+  font-size: calc(10px + 2vmin);
+  color: #2E3B55;
+}

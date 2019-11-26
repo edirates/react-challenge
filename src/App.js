@@ -11,6 +11,18 @@ import {
   Route
 } from "react-router-dom";
 
+import { makeStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
+const useStyles = makeStyles(theme => ({
+  close: {
+    padding: theme.spacing(0.5),
+  },
+}));
+
 // ======== Class Method ========
 class App extends Component {
   constructor() {
@@ -18,8 +30,39 @@ class App extends Component {
     this.state = {
       digimons: [],
       search: "",
-      myDigimons: []
+      myDigimons: [],
+      success: false,
+      error: false,
+      remove: false
     }
+  }
+  handleOpenSuccess = (e) => {
+    this.setState({
+      success: true
+    }, function () {
+      // console.log(this.state.search);
+    });
+  }
+  handleCloseSuccess = (e) => {
+    this.setState({
+      success: false
+    }, function () {
+      // console.log(this.state.search);
+    });
+  }
+  handleOpenError = (e) => {
+    this.setState({
+      error: true
+    }, function () {
+      // console.log(this.state.search);
+    });
+  }
+  handleCloseError = (e) => {
+    this.setState({
+      error: false
+    }, function () {
+      // console.log(this.state.search);
+    });
   }
   handleChange = (e) => {
     this.setState({
@@ -28,11 +71,34 @@ class App extends Component {
       // console.log(this.state.search);
     });
   }
-  addDigimon = (digimon) => {
-    let myDigimons = [...this.state.myDigimons, digimon];
+  handleOpenRemove = (e) => {
     this.setState({
-      myDigimons: myDigimons
+      remove: true
+    }, function () {
+      // console.log(this.state.search);
     });
+  }
+  handleCloseRemove = (e) => {
+    this.setState({
+      remove: false
+    }, function () {
+      // console.log(this.state.search);
+    });
+  }
+  addDigimon = (digimon) => {
+    const found = this.state.myDigimons.filter((added) => {
+      return added.id == digimon.id;
+    });
+    if (found.length > 0) {
+      this.handleOpenError();
+    }
+    else {
+      let myDigimons = [...this.state.myDigimons, digimon];
+      this.setState({
+        myDigimons: myDigimons
+      });
+      this.handleOpenSuccess();
+    }
   }
   delDigimon = (id) => {
     let myDigimons = this.state.myDigimons.filter(digimon => {
@@ -41,6 +107,7 @@ class App extends Component {
     this.setState({
       myDigimons: myDigimons
     });
+    this.handleOpenRemove();
   }
   componentDidMount() {
     fetch("https://digimon-api.herokuapp.com/api/digimon")
@@ -67,6 +134,75 @@ class App extends Component {
               <Detail addDigimon={this.addDigimon} />
             </Route>
           </Switch>
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            open={this.state.success}
+            autoHideDuration={3000}
+            onClose={this.handleCloseSuccess}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">Added digimon successfully</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="close"
+                color="secondary"
+                onClick={this.handleCloseSuccess}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            open={this.state.error}
+            autoHideDuration={3000}
+            onClose={this.handleCloseError}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">Digimon has already been added</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="close"
+                color="secondary"
+                onClick={this.handleCloseError}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            open={this.state.remove}
+            autoHideDuration={3000}
+            onClose={this.handleCloseRemove}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">Removed digimon successfully</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="close"
+                color="secondary"
+                onClick={this.handleCloseRemove}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
         </Router>
       </Fragment>
     );
