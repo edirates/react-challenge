@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,17 +29,18 @@ const useStyles = makeStyles(theme => ({
 
 const Cards = (props) => {
     const classes = useStyles();
+    
+    const digimons = props.digimons.filter((digimon) => {
+        return digimon.name.toLowerCase().includes(props.search.toLowerCase());
+    });
+
     return (
         <div className={classes.root} style={{ display:"flex", justifyContent:"center", flexWrap:"wrap" }} >
         {   
-            (props.digimons.length > 0) && 
-            props.digimons.filter((digimon) => {
-                return digimon.name.toLowerCase().includes(props.search.toLowerCase());
-            })
-            .map((digimon) => {
+            digimons.map((digimon) => {
                 return (
                     <Card className={classes.card} key={digimon.id} style={{ margin:20, textAlign:"center", fontSize:18, fontWeight:"bold", color:"#2E3B55" }}>
-                        <CardActionArea>
+                        <CardActionArea onClick={() => props.history.push("/digimon/"+digimon.id)}>
                             <CardMedia
                                 component="img"
                                 alt={'img-'+digimon.id}
@@ -55,8 +57,17 @@ const Cards = (props) => {
                             </CardContent>
                         </CardActionArea>
                         <CardActions style={{ display:"flex", justifyContent:"center" }}>
-                            <Button size="small" color="primary" startIcon={<Icon>add-box</Icon>}>
-                                Add to My Digimon
+                            <Button 
+                                size="small" 
+                                color="primary" 
+                                startIcon={<Icon>add-box</Icon>} 
+                                onClick={() => props.addDigimon({
+                                    id: digimon.id,
+                                    name: digimon.name,
+                                    img: digimon.img,
+                                    level: digimon.level
+                                })}>
+                                Add to My Digimons
                             </Button>
                         </CardActions>
                     </Card>
@@ -65,7 +76,7 @@ const Cards = (props) => {
         }
         </div>
     );
-
+    // ============== Avatar Mode ==============
     // return (
     //     <div className={classes.root} style={{ display:"flex", justifyContent:"center", flexWrap:"wrap" }} >
     //     {   
@@ -87,4 +98,4 @@ const Cards = (props) => {
     // );
 }
 
-export default Cards;
+export default withRouter(Cards);
