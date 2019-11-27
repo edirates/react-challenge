@@ -17,12 +17,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-const useStyles = makeStyles(theme => ({
-  close: {
-    padding: theme.spacing(0.5),
-  },
-}));
-
 // ======== Class Method ========
 class App extends Component {
   constructor() {
