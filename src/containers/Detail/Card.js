@@ -3,7 +3,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 
 // Import Material UI
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';

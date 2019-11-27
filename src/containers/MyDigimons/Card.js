@@ -43,7 +43,7 @@ const CardDetail = (props) => {
     
     const myDigimons = useSelector(state => state.myDigimons);
     const found = myDigimons.filter((digimon) => {
-        return digimon.id == id;
+        return digimon.id === Number(id);
     });
 
     useEffect(() => {

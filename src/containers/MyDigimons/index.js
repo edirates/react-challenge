@@ -7,7 +7,6 @@ import Avatar from './Avatar';
 import Card from './Card';
 
 // Import Material UI
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 

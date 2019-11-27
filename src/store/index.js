@@ -1,10 +1,12 @@
-import { createStore } from 'redux';
-import { SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH } from './constant';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { SET_DIGIMON, SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH } from './constant';
 
 const initialState = {
     digimons: [],
     myDigimons: [],
-    search: ""
+    search: "",
+    digimon: {}
 }
 
 function reducer(state = initialState, action) {
@@ -24,11 +26,16 @@ function reducer(state = initialState, action) {
                 ...state,
                 search: action.search
             };
+        case SET_DIGIMON:
+            return {
+                ...state,
+                digimon: action.digimon
+            };
         default: 
             return state;
     }
 }
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk));
 
 export default store;

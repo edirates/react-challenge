@@ -2,8 +2,8 @@
 import axios from '../../apis/axios';
 import React, { Fragment, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setSearch } from '../../store/actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearch, getDigimonDetail } from '../../store/actions';
 import Card from './Card';
 
 // Import Material UI
@@ -12,22 +12,14 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
 const List = (props) => {
-    const [ digimon, setDigimon ] = useState({});
     const { id } = useParams();
+    
+    const digimon = useSelector((state) => state.digimon);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(setSearch(''));
-        axios({
-            method: 'GET',
-            url: '/id/'+id
-        })
-        .then((result) => {
-            setDigimon(result.data[0]);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+        dispatch(getDigimonDetail(id));
     }, []);
 
     return (

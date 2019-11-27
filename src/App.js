@@ -1,7 +1,7 @@
 // Import React Stuff
 import './App.css';
 import React, { Component, Fragment } from 'react';
-import { setDigimons, setMyDigimons } from './store/actions';
+import { setDigimons, setMyDigimons, getDigimons } from './store/actions';
 import { connect } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -66,7 +66,7 @@ class App extends Component {
   // Handle My Digimons
   addDigimon = (digimon) => {
     const found = this.props.myDigimons.filter((added) => {
-      return added.id == digimon.id;
+      return added.id === digimon.id;
     });
     if (found.length > 0) {
       this.handleOpenError();
@@ -87,11 +87,7 @@ class App extends Component {
 
   // Lifecycle
   componentDidMount() {
-    fetch("https://digimon-api.herokuapp.com/api/digimon")
-    .then( response => response.json() )
-    .then( (digimons) => {
-      this.props.setDigimons(digimons);
-    })
+    this.props.getDigimons();
   }
 
   // Rendering
@@ -196,7 +192,8 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 const mapDispatchToProps = {
   setDigimons,
-  setMyDigimons
+  setMyDigimons,
+  getDigimons
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
