@@ -1,6 +1,12 @@
-import React, { Fragment } from 'react';
+// Import React Stuff
+import axios from '../../apis/axios';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+
+// Import Material UI
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -9,7 +15,6 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
-import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -17,78 +22,82 @@ const useStyles = makeStyles(theme => ({
       '& > *': {
         margin: theme.spacing(1),
       },
-    },
-    bigAvatar: {
-      width: 100,
-      height: 100,
+      display:"flex", 
+      justifyContent:"center", 
+      flexWrap:"wrap"
     },
     card: {
-      maxWidth: 275,
+      maxWidth: 375,
+      margin:20, 
+      textAlign:"center", 
+      fontSize:18, 
+      fontWeight:"bold", 
+      color:"#2E3B55" 
     },
 }));
 
-const Cards = (props) => {
+const CardDetail = (props) => {
     const classes = useStyles();
     
-    const myDigimons = props.myDigimons.filter((digimon) => {
-        return digimon.name.toLowerCase().includes(props.search.toLowerCase());
+    const [ digimon, setDigimon ] = useState({});
+    const { id } = useParams();
+    
+    const myDigimons = useSelector(state => state.myDigimons);
+    const found = myDigimons.filter((digimon) => {
+        return digimon.id == id;
     });
 
-    // return (
-    //     <div className={classes.root} style={{ display:"flex", justifyContent:"center", flexWrap:"wrap" }} >
-    //     {   
-    //         myDigimons.map((digimon) => {
-    //             return (
-    //                 <Card className={classes.card} key={digimon.id} style={{ margin:20, textAlign:"center", fontSize:18, fontWeight:"bold", color:"#2E3B55" }}>
-    //                     <CardActionArea onClick={() => props.history.push("/digimon/"+digimon.id)}>
-    //                         <CardMedia
-    //                             component="img"
-    //                             alt={'img-'+digimon.id}
-    //                             image={digimon.img}
-    //                             title={digimon.name}
-    //                         />
-    //                         <CardContent>
-    //                             <Typography gutterBottom variant="h5" component="h2">
-    //                                 {digimon.name}
-    //                             </Typography>
-    //                             <Typography variant="body2" color="textSecondary" component="p">
-    //                                 {digimon.level}
-    //                             </Typography>
-    //                         </CardContent>
-    //                     </CardActionArea>
-    //                     <CardActions style={{ display:"flex", justifyContent:"center" }}>
-    //                         <Button 
-    //                             size="small" 
-    //                             color="secondary" 
-    //                             startIcon={<Icon>close</Icon>} 
-    //                             onClick={() => props.delDigimon(digimon.id)}>
-    //                             Remove from My Digimons
-    //                         </Button>
-    //                     </CardActions>
-    //                 </Card>
-    //             ); 
-    //         })
-    //     }
-    //     </div>
-    // );
-    // ============== Avatar Mode ==============
-    return (
-        <div className="my-digimons" >
-        {   
-            (props.myDigimons.length > 0) && 
-            props.myDigimons.filter((digimon) => {
-                return digimon.name.toLowerCase().includes(props.search.toLowerCase());
-            })
-            .map((digimon) => {
-                return (
-                    <div key={digimon.id} style={{ margin:10, textAlign:"center", fontSize:18, fontWeight:"bold", color:"#2E3B55" }}>
-                        <Avatar alt={'img-'+digimon.id} src={digimon.img} className={classes.bigAvatar} style={{ cursor:"pointer" }} onClick={() => props.history.push("/mydigimons/detail/"+digimon.id)}/>
-                    </div>
-                ); 
-            })
-        }
-        </div>
-    );
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: '/id/'+id
+        })
+        .then((result) => {
+            setDigimon(result.data[0]);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }, [id]);
+
+    if (found.length > 0) {
+        return (
+            <div className={classes.root}>
+                <Card className={classes.card} key={digimon.id}>
+                    <CardActionArea onClick={() => props.history.push("/digimon/"+digimon.id)}>
+                        <CardMedia
+                            component="img"
+                            alt={'img-'+digimon.id}
+                            image={digimon.img}
+                            title={digimon.name}
+                        />
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="h2">
+                                {digimon.name}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                {digimon.level}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
+                    <CardActions style={{ display:"flex", justifyContent:"center" }}>
+                        <Button 
+                            size="small" 
+                            color="secondary" 
+                            startIcon={<Icon>close</Icon>} 
+                            onClick={() => props.delDigimon(digimon.id)}>
+                            Remove from My Digimons
+                        </Button>
+                    </CardActions>
+                </Card>
+            </div>
+        );
+    }
+    else {
+        return (
+            <h1 className="empty">First add digimon to your digimons.</h1>
+        );
+    }
 }
 
-export default withRouter(Cards);
+export default withRouter(CardDetail);

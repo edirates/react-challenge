@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react';
+// Import React Stuff
+import React from 'react';
 import { withRouter } from 'react-router-dom';
+
+// Import Material UI
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
@@ -50,31 +51,30 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Cards = (props) => {
+const CardDetail = (props) => {
     const classes = useStyles();
-    const theme = useTheme();
     return (
-        <Card className="card-detail" style={{ backgroundColor: '#cfe8fc'}}>
-            <Avatar alt={'img-'+props.digimon.id} src={props.digimon.img} className={classes.bigAvatar} />
-            <div className={classes.details}>
-                <CardContent className={classes.content} style={{ textAlign:"center" }}>
-                    <Typography component="h5" variant="h5">
-                        { props.digimon.name }
-                    </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                        { props.digimon.level }
-                    </Typography>
-                    <Button 
-                        variant="outlined" 
-                        color="primary"
-                        startIcon={<Icon>add-box</Icon>} 
-                        onClick={() => props.addDigimon(props.digimon)}>
-                        Add to My Digimons
-                    </Button>
-                </CardContent>
-            </div>
-        </Card>
+      <Card className="card-detail" style={{ backgroundColor: '#cfe8fc'}}>
+        <Avatar alt={'img-'+props.digimon.id} src={props.digimon.img} className={classes.bigAvatar} />
+        <div className={classes.details}>
+          <CardContent className={classes.content} style={{ textAlign:"center" }}>
+            <Typography component="h5" variant="h5">
+              { props.digimon.name }
+            </Typography>
+            <Typography variant="subtitle1" color="textSecondary">
+              { props.digimon.level }
+            </Typography>
+            <Button 
+              variant="outlined" 
+              color="primary"
+              startIcon={<Icon>add-box</Icon>} 
+              onClick={() => props.addDigimon(props.digimon)}>
+              Add to My Digimons
+            </Button>
+          </CardContent>
+        </div>
+      </Card>
     );
 }
 
-export default withRouter(Cards);
+export default withRouter(CardDetail);

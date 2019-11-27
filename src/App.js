@@ -1,128 +1,120 @@
-import React, { Component, Fragment, useState, useEffect } from 'react';
-import axios from './apis/axios';
-import NavBar from './components/Navbar';
-import Digimons from './containers/Digimons';
-import MyDigimons from './containers/MyDigimons';
-import Detail from './containers/Detail';
+// Import React Stuff
 import './App.css';
+import axios from './apis/axios';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
 
-import { makeStyles } from '@material-ui/core/styles';
+// Import Components
+import NavBar from './components/Navbar';
+import Digimons from './containers/Digimons';
+import MyDigimons from './containers/MyDigimons';
+import Detail from './containers/Detail';
+
+// Import Material UI Stuff
 import Snackbar from '@material-ui/core/Snackbar';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 // ======== Class Method ========
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      digimons: [],
-      search: "",
-      myDigimons: [],
       success: false,
       error: false,
       remove: false
     }
   }
+
+  // Handle Snackbars
   handleOpenSuccess = (e) => {
     this.setState({
       success: true
-    }, function () {
-      // console.log(this.state.search);
     });
   }
   handleCloseSuccess = (e) => {
     this.setState({
       success: false
-    }, function () {
-      // console.log(this.state.search);
     });
   }
   handleOpenError = (e) => {
     this.setState({
       error: true
-    }, function () {
-      // console.log(this.state.search);
     });
   }
   handleCloseError = (e) => {
     this.setState({
       error: false
-    }, function () {
-      // console.log(this.state.search);
-    });
-  }
-  handleChange = (e) => {
-    this.setState({
-      search: e.target.value
-    }, function () {
-      // console.log(this.state.search);
     });
   }
   handleOpenRemove = (e) => {
     this.setState({
       remove: true
-    }, function () {
-      // console.log(this.state.search);
     });
   }
   handleCloseRemove = (e) => {
     this.setState({
       remove: false
-    }, function () {
-      // console.log(this.state.search);
     });
   }
+
+  // Handle My Digimons
   addDigimon = (digimon) => {
-    const found = this.state.myDigimons.filter((added) => {
+    const found = this.props.myDigimons.filter((added) => {
       return added.id == digimon.id;
     });
     if (found.length > 0) {
       this.handleOpenError();
     }
     else {
-      let myDigimons = [...this.state.myDigimons, digimon];
-      this.setState({
+      let myDigimons = [...this.props.myDigimons, digimon];
+      this.props.dispatch({ 
+        type: "SET_MY_DIGIMONS",
         myDigimons: myDigimons
       });
       this.handleOpenSuccess();
     }
   }
   delDigimon = (id) => {
-    let myDigimons = this.state.myDigimons.filter(digimon => {
+    let myDigimons = this.props.myDigimons.filter(digimon => {
       return digimon.id !== id;
     });
-    this.setState({
+    this.props.dispatch({ 
+      type: "SET_MY_DIGIMONS",
       myDigimons: myDigimons
     });
     this.handleOpenRemove();
   }
+
+  // Lifecycle
   componentDidMount() {
     fetch("https://digimon-api.herokuapp.com/api/digimon")
     .then( response => response.json() )
     .then( (digimons) => {
-      this.setState({
+      this.props.dispatch({ 
+        type: "SET_DIGIMONS",
         digimons: digimons
-      })
+      });
     })
   }
+
+  // Rendering
   render() {
     return (
       <Fragment>
         <Router>
-          <NavBar search={this.state.search} change={this.handleChange}/>
+          <NavBar />
           <Switch>
             <Route exact path="/">
-              <Digimons search={this.state.search} digimons={this.state.digimons} addDigimon={this.addDigimon} />
+              <Digimons addDigimon={this.addDigimon} />
             </Route>
             <Route path="/mydigimons">
-              <MyDigimons search={this.state.search} myDigimons={this.state.myDigimons} delDigimon={this.delDigimon} />
+              <MyDigimons delDigimon={this.delDigimon} />
             </Route>
             <Route path="/digimon/:id">
               <Detail addDigimon={this.addDigimon} />
@@ -203,33 +195,12 @@ class App extends Component {
   }
 }
 
-// ============ Function Method ==============
-// const App = () => {
-//   const [ digimons, setDigimons ] = useState([]);
-//   const [ search, setSearch ] = useState("");
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    digimons: state.digimons,
+    myDigimons: state.myDigimons,
+    search: state.search
+  }
+}
 
-//   const handleChange = (e) => {
-//     setSearch(e.target.value);
-//   }
-
-//   useEffect(() => {
-//     axios({
-//       method: "GET"
-//     })
-//     .then(({data}) => {
-//       setDigimons(data);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-//   }, []);
-
-//   return (
-//     <Fragment>
-//       <NavBar search={search} change={handleChange}/>
-//       <Digimons search={search} digimons={digimons} />
-//     </Fragment>
-//   );
-// }
-
-export default App;
+export default connect(mapStateToProps)(App);

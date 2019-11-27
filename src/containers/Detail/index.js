@@ -1,12 +1,15 @@
+// Import React Stuff
 import axios from '../../apis/axios';
 import React, { Fragment, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import Card from './Card';
+
+// Import Material UI
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Card from './Card';
 
-const CardDetail = (props) => {
+const List = (props) => {
     const [ digimon, setDigimon ] = useState({});
     const { id } = useParams();
     
@@ -35,4 +38,4 @@ const CardDetail = (props) => {
     );
 }
 
-export default CardDetail;
+export default List;
