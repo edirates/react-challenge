@@ -1,6 +1,15 @@
+// Import Redux
 import { createStore, applyMiddleware } from 'redux';
+
+// Import Redux Persist
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'
+
+// Import middleware
 import thunk from 'redux-thunk';
 import middleware from '../middleware';
+
+// Import Constant
 import { SET_DIGIMON, SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH } from './constant';
 
 const initialState = {
@@ -37,7 +46,18 @@ function reducer(state = initialState, action) {
     }
 }
 
-// const store = createStore(reducer, applyMiddleware(thunk));
-const store = createStore(reducer, applyMiddleware(middleware));
+const persistConfig = {
+    key: 'root',
+    storage,
+}
+const persistedReducer = persistReducer(persistConfig, reducer)
 
-export default store;
+// const store = createStore(persistedReducer, applyMiddleware(thunk));
+const store = createStore(persistedReducer, applyMiddleware(middleware));
+
+const persistor = persistStore(store);
+
+export {
+    store,
+    persistor
+};
