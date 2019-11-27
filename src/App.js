@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 // Import Components
@@ -102,22 +103,25 @@ class App extends Component {
             {
               (this.props.isLogin)
               ? <Digimons addDigimon={this.addDigimon} />
-              : <Login />
+              : <Redirect to="/login" />
             }
             </Route>
             <Route path="/mydigimons">
             {
               (this.props.isLogin)
               ? <MyDigimons delDigimon={this.delDigimon} />
-              : <Login />
+              : <Redirect to="/login" />
             }
             </Route>
             <Route path="/digimon/:id">
             {
               (this.props.isLogin)
               ? <Detail addDigimon={this.addDigimon} />
-              : <Login />
+              : <Redirect to="/login" />
             }
+            </Route>
+            <Route path="/login">
+              <Login />
             </Route>
           </Switch>
           <Snackbar

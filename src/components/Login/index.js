@@ -1,5 +1,6 @@
 // Import React Stuff
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLogin } from '../../store/actions';
 
@@ -16,13 +17,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function UncontrolledTextField() {
+const Login = (props) => {
     const classes = useStyles();
     
     const dispatch = useDispatch();
 
     return (
-        <form onSubmit={() => dispatch(setLogin())} className="login-form">
+        <form onSubmit={() => { dispatch(setLogin()); props.history.push("/");}} className="login-form">
             <img src="/logo.png" alt="logo" style={{ maxWidth:400, marginBottom:50 }}></img>
             <div>
                 <TextField
@@ -41,3 +42,5 @@ export default function UncontrolledTextField() {
         </form>
     );
 }
+
+export default withRouter(Login);
