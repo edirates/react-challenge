@@ -1,4 +1,5 @@
 import { createStore } from 'redux';
+import { SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH } from './constant';
 
 const initialState = {
     digimons: [],
@@ -8,17 +9,17 @@ const initialState = {
 
 function reducer(state = initialState, action) {
     switch (action.type) {
-        case "SET_DIGIMONS":
+        case SET_DIGIMONS:
             return {
                 ...state,
                 digimons: action.digimons
             };
-        case "SET_MY_DIGIMONS":
+        case SET_MY_DIGIMONS:
             return {
                 ...state,
                 myDigimons: action.myDigimons
             };
-        case "SET_SEARCH":
+        case SET_SEARCH:
             return {
                 ...state,
                 search: action.search

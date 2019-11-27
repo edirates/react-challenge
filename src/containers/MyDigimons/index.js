@@ -1,7 +1,8 @@
 // Import React Stuff
-import React, { Fragment } from 'react';
-import { useSelector } from 'react-redux';
+import React, { Fragment, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Route } from "react-router-dom";
+import { setSearch } from "../../store/actions";
 import Avatar from './Avatar';
 import Card from './Card';
 
@@ -12,6 +13,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 const List = (props) => {
     const myDigimons = useSelector(state => state.myDigimons);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(setSearch(''));
+    },[]);
 
     return (
         <Fragment>

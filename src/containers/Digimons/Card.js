@@ -1,7 +1,7 @@
 // Import React Stuff
-import React, { Fragment } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // Import Material UI
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,7 +30,6 @@ const Cards = (props) => {
     
     const search = useSelector(state => state.search);
     const digimons = useSelector(state => state.digimons);
-    const dispatch = useDispatch();
 
     const filteredDigimon = digimons.filter((digimon) => {
         return digimon.name.toLowerCase().includes(search.toLowerCase());

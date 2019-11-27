@@ -1,7 +1,7 @@
 // Import React Stuff
 import './App.css';
-import axios from './apis/axios';
 import React, { Component, Fragment } from 'react';
+import { setDigimons, setMyDigimons } from './store/actions';
 import { connect } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -73,10 +73,7 @@ class App extends Component {
     }
     else {
       let myDigimons = [...this.props.myDigimons, digimon];
-      this.props.dispatch({ 
-        type: "SET_MY_DIGIMONS",
-        myDigimons: myDigimons
-      });
+      this.props.setMyDigimons(myDigimons);
       this.handleOpenSuccess();
     }
   }
@@ -84,10 +81,7 @@ class App extends Component {
     let myDigimons = this.props.myDigimons.filter(digimon => {
       return digimon.id !== id;
     });
-    this.props.dispatch({ 
-      type: "SET_MY_DIGIMONS",
-      myDigimons: myDigimons
-    });
+    this.props.setMyDigimons(myDigimons);
     this.handleOpenRemove();
   }
 
@@ -96,10 +90,7 @@ class App extends Component {
     fetch("https://digimon-api.herokuapp.com/api/digimon")
     .then( response => response.json() )
     .then( (digimons) => {
-      this.props.dispatch({ 
-        type: "SET_DIGIMONS",
-        digimons: digimons
-      });
+      this.props.setDigimons(digimons);
     })
   }
 
@@ -203,4 +194,9 @@ const mapStateToProps = (state /*, ownProps*/) => {
   }
 }
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = {
+  setDigimons,
+  setMyDigimons
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
