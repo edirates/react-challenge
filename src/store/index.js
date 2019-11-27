@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import middleware from '../middleware';
 import { SET_DIGIMON, SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH } from './constant';
 
 const initialState = {
@@ -36,6 +37,7 @@ function reducer(state = initialState, action) {
     }
 }
 
-const store = createStore(reducer, applyMiddleware(thunk));
+// const store = createStore(reducer, applyMiddleware(thunk));
+const store = createStore(reducer, applyMiddleware(middleware));
 
 export default store;
