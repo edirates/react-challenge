@@ -1,7 +1,7 @@
 // Import React Stuff
 import React, { Fragment, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setSearch } from '../../store/actions';
+import { setSearch, setDigimon } from '../../store/actions';
 import Card from './Card';
 
 // Import Material UI
@@ -14,8 +14,9 @@ const List = (props) => {
 
     useEffect(() => {
         dispatch(setSearch(''));
+        dispatch(setDigimon({}));
     }, []);
-    
+
     return (
         <Fragment>
             <CssBaseline />

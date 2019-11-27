@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route } from "react-router-dom";
-import { setSearch } from "../../store/actions";
+import { setSearch, setDigimon } from "../../store/actions";
 import Avatar from './Avatar';
 import Card from './Card';
 
@@ -16,6 +16,7 @@ const List = (props) => {
 
     useEffect(() => {
         dispatch(setSearch(''));
+        dispatch(setDigimon({}));
     },[]);
 
     return (

@@ -1,7 +1,7 @@
 // Import React Stuff
 import './App.css';
 import React, { Component, Fragment } from 'react';
-import { setDigimons, setMyDigimons, getDigimons } from './store/actions';
+import { setMyDigimons, getDigimons } from './store/actions';
 import { connect } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -11,6 +11,7 @@ import {
 
 // Import Components
 import NavBar from './components/Navbar';
+import Login from './components/Login';
 import Digimons from './containers/Digimons';
 import MyDigimons from './containers/MyDigimons';
 import Detail from './containers/Detail';
@@ -95,16 +96,28 @@ class App extends Component {
     return (
       <Fragment>
         <Router>
-          <NavBar />
+          { (this.props.isLogin) && <NavBar />}
           <Switch>
             <Route exact path="/">
-              <Digimons addDigimon={this.addDigimon} />
+            {
+              (this.props.isLogin)
+              ? <Digimons addDigimon={this.addDigimon} />
+              : <Login />
+            }
             </Route>
             <Route path="/mydigimons">
-              <MyDigimons delDigimon={this.delDigimon} />
+            {
+              (this.props.isLogin)
+              ? <MyDigimons delDigimon={this.delDigimon} />
+              : <Login />
+            }
             </Route>
             <Route path="/digimon/:id">
-              <Detail addDigimon={this.addDigimon} />
+            {
+              (this.props.isLogin)
+              ? <Detail addDigimon={this.addDigimon} />
+              : <Login />
+            }
             </Route>
           </Switch>
           <Snackbar
@@ -186,12 +199,12 @@ const mapStateToProps = (state /*, ownProps*/) => {
   return {
     digimons: state.digimons,
     myDigimons: state.myDigimons,
-    search: state.search
+    search: state.search,
+    isLogin: state.isLogin
   }
 }
 
 const mapDispatchToProps = {
-  setDigimons,
   setMyDigimons,
   getDigimons
 }

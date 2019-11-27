@@ -10,13 +10,14 @@ import thunk from 'redux-thunk';
 import middleware from '../middleware';
 
 // Import Constant
-import { SET_DIGIMON, SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH } from './constant';
+import { SET_DIGIMON, SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH, SET_LOGIN, SET_LOGOUT } from './constant';
 
 const initialState = {
     digimons: [],
     myDigimons: [],
     search: "",
-    digimon: {}
+    digimon: {},
+    isLogin: false
 }
 
 function reducer(state = initialState, action) {
@@ -40,6 +41,19 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 digimon: action.digimon
+            };
+        case SET_LOGIN:
+            return {
+                ...state,
+                isLogin: true
+            };
+        case SET_LOGOUT:
+            return {
+                ...state,
+                myDigimons: [],
+                search: "",
+                digimon: {},
+                isLogin: false
             };
         default: 
             return state;
