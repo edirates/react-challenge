@@ -11,6 +11,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 
@@ -32,10 +33,10 @@ const NavBar = (props) => {
             </div>
             <Search />
           </div>
-          <Button variant="contained" color="primary" onClick={() => props.history.push("/mydigimons")} style={{ marginLeft:10 }}>
+          <Button variant="contained" color="primary" startIcon={<Icon>android</Icon>} onClick={() => props.history.push("/mydigimons")} style={{ marginLeft:10 }}>
             My Digimons
           </Button>
-          <Button variant="contained" color="secondary" onClick={() => dispatch(setLogout())} style={{ marginLeft:10 }}>
+          <Button variant="contained" color="secondary" startIcon={<Icon>logout</Icon>} onClick={() => dispatch(setLogout())} style={{ marginLeft:10 }}>
             Logout
           </Button>
         </Toolbar>

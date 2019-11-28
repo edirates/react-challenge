@@ -23,7 +23,7 @@ const Login = (props) => {
     const dispatch = useDispatch();
 
     return (
-        <form onSubmit={() => { dispatch(setLogin()); props.history.push("/");}} className="login-form">
+        <form onSubmit={() => { dispatch(setLogin()); props.history.push("/"); }} className="login-form">
             <img src="/logo.png" alt="logo" style={{ maxWidth:400, marginBottom:50 }}></img>
             <div>
                 <TextField

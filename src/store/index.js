@@ -1,5 +1,5 @@
 // Import Redux
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 
 // Import Redux Persist
 import { persistStore, persistReducer } from 'redux-persist';
@@ -11,6 +11,8 @@ import middleware from '../middleware';
 
 // Import Constant
 import { SET_DIGIMON, SET_DIGIMONS, SET_MY_DIGIMONS, SET_SEARCH, SET_LOGIN, SET_LOGOUT } from './constant';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const initialState = {
     digimons: [],
@@ -67,7 +69,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducer)
 
 // const store = createStore(persistedReducer, applyMiddleware(thunk));
-const store = createStore(persistedReducer, applyMiddleware(middleware));
+const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(middleware)));
 
 const persistor = persistStore(store);
 
